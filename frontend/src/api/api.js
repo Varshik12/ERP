@@ -14,8 +14,12 @@ const fetchJSON = async (url, options = {}) => {
     ...(options.headers || {})          // Merges any additional custom headers.
   };
 
+  // Prepend API Base URL. In production, default to the user's Render backend URL.
+  const apiBase = import.meta.env.VITE_API_URL || (import.meta.env.PROD ? 'https://erp-enia.onrender.com' : '');
+  const fullUrl = `${apiBase}${url}`;
+
   // Uses standard Fetch API to perform the network call to the backend.
-  const response = await fetch(url, { ...options, headers });
+  const response = await fetch(fullUrl, { ...options, headers });
   
   // Converts and returns the backend response in JSON format.
   return await response.json();
